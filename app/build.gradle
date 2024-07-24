@@ -7,12 +7,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.bersyte.noteapp"
-        minSdkVersion 26
+        minSdkVersion 30
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -58,8 +58,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
 
     // Room
-    implementation "androidx.room:room-runtime:2.2.6"
-    kapt "androidx.room:room-compiler:2.2.6"
+    implementation "androidx.room:room-runtime:2.4.0"
+    kapt "androidx.room:room-compiler:2.4.0"
 
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.2.6"

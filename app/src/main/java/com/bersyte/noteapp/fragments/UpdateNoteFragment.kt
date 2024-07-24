@@ -1,7 +1,11 @@
 package com.bersyte.noteapp.fragments
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -15,7 +19,7 @@ import com.bersyte.noteapp.viewmodel.NoteViewModel
 
 
 class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
-
+    val REQUEST_IMAGE_GET = 1
     private var _binding: FragmentUpdateNoteBinding? = null
     private val binding get() = _binding!!
 
@@ -64,6 +68,22 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
                 activity?.toast("Enter a note title please")
             }
         }
+
+        binding.ivCamera.setOnClickListener() {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+                type = "image/*"
+            }
+            startActivityForResult(intent, REQUEST_IMAGE_GET)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_GET && resultCode == Activity.RESULT_OK) {
+            val selectedImage: Uri? = data?.data
+            binding.ivNoteImage.setImageURI(selectedImage)
+        }
+
     }
 
     private fun deleteNote() {

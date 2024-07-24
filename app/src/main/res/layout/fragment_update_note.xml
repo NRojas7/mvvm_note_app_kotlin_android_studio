@@ -42,7 +42,7 @@
                 <EditText
                     android:id="@+id/etNoteBodyUpdate"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="282dp"
                     android:layout_marginTop="20dp"
                     android:background="@android:color/transparent"
                     android:ems="10"
@@ -53,9 +53,23 @@
                     android:textColorHint="@color/hintColor"
                     android:textSize="16sp" />
 
+                <ImageView
+                    android:id="@+id/ivNoteImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="211dp"
+                    android:contentDescription="TODO"
+                    android:scaleType="centerCrop" />
+
+                <ImageView
+                    android:id="@+id/ivCamera"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_camera" />
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
