@@ -51,7 +51,7 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
         val noteBody = binding.etNoteBody.text.toString().trim()
 
         if (noteTitle.isNotEmpty()) {
-            val note = Note(0, noteTitle, noteBody)
+            val note = Note(0, noteTitle, noteBody, null)
 
             noteViewModel.addNote(note)
             Snackbar.make(

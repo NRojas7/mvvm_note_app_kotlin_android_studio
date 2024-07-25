@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -54,12 +55,17 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
         binding.etNoteBodyUpdate.setText(currentNote.noteBody)
         binding.etNoteTitleUpdate.setText(currentNote.noteTitle)
 
+        if (currentNote.imageUri != null) {
+            val parsedUri = Uri.parse(currentNote.imageUri)
+            binding.ivNoteImage.setImageURI(parsedUri)
+        }
+
         binding.fabDone.setOnClickListener {
             val title = binding.etNoteTitleUpdate.text.toString().trim()
             val body = binding.etNoteBodyUpdate.text.toString().trim()
 
             if (title.isNotEmpty()) {
-                val note = Note(currentNote.id, title, body)
+                val note = Note(currentNote.id, title, body, currentNote.imageUri)
                 noteViewModel.updateNote(note)
 
                 view.findNavController().navigate(R.id.action_updateNoteFragment_to_homeFragment)
@@ -70,17 +76,24 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
         }
 
         binding.ivCamera.setOnClickListener() {
+            // open the gallery and retrive a photo uri
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
                 type = "image/*"
             }
             startActivityForResult(intent, REQUEST_IMAGE_GET)
+
         }
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_GET && resultCode == Activity.RESULT_OK) {
+            // get the image data from the gallery intent
             val selectedImage: Uri? = data?.data
+            // store the uri first
+            currentNote.imageUri = selectedImage.toString()
+            // then display it
             binding.ivNoteImage.setImageURI(selectedImage)
         }
 
