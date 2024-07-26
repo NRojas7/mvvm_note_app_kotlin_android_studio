@@ -9,6 +9,7 @@ import com.bersyte.noteapp.repository.NoteRepository
 import com.bersyte.noteapp.viewmodel.NoteViewModel
 import com.bersyte.noteapp.viewmodel.NoteViewModelProviderFactory
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         setUpViewModel()
+        val resolver = contentResolver
     }
 
     private fun setUpViewModel() {

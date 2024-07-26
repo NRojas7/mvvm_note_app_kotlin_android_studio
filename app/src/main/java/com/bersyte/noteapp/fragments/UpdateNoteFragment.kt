@@ -2,11 +2,12 @@ package com.bersyte.noteapp.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -17,6 +18,9 @@ import com.bersyte.noteapp.databinding.FragmentUpdateNoteBinding
 import com.bersyte.noteapp.model.Note
 import com.bersyte.noteapp.toast
 import com.bersyte.noteapp.viewmodel.NoteViewModel
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 
 
 class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
@@ -77,7 +81,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
         binding.ivCamera.setOnClickListener() {
             // open the gallery and retrive a photo uri
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
                 type = "image/*"
             }
             startActivityForResult(intent, REQUEST_IMAGE_GET)
@@ -90,13 +94,29 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_GET && resultCode == Activity.RESULT_OK) {
             // get the image data from the gallery intent
-            val selectedImage: Uri? = data?.data
-            // store the uri first
-            currentNote.imageUri = selectedImage.toString()
-            // then display it
-            binding.ivNoteImage.setImageURI(selectedImage)
-        }
+            val selectedImageUri: Uri? = data?.data
+            // read the image uri using content resolver
+            val resolver = requireContext().contentResolver
+            // create a new file for the uri to be copied to
+            val imageUriCopy = File(requireContext().filesDir, "test.jpg")
 
+            if (selectedImageUri != null) {
+                // open stream to write data to the imageUriCopy file
+                val outputStream = FileOutputStream(imageUriCopy)
+                // read the image uri data and copy it to the imageUriCopy file
+                resolver.openInputStream(selectedImageUri)?.copyTo(outputStream)
+                // save the file path to the db
+                currentNote.imageUri = imageUriCopy.absolutePath
+                // display image
+                binding.ivNoteImage.setImageURI(selectedImageUri)
+            }
+        }
+    }
+
+    private fun File.copyInputStreamtoFile(inputStream : InputStream) {
+        this.outputStream().use { fileOut ->
+            inputStream.copyTo(fileOut)
+        }
     }
 
     private fun deleteNote() {
