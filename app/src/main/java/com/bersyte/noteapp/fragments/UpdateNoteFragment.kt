@@ -24,6 +24,7 @@ import java.io.InputStream
 
 
 class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
+
     val REQUEST_IMAGE_GET = 1
     private var _binding: FragmentUpdateNoteBinding? = null
     private val binding get() = _binding!!
@@ -77,15 +78,6 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             } else {
                 activity?.toast("Enter a note title please")
             }
-        }
-
-        binding.ivCamera.setOnClickListener() {
-            // open the gallery and retrive a photo uri
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-                type = "image/*"
-            }
-            startActivityForResult(intent, REQUEST_IMAGE_GET)
-
         }
     }
 
@@ -145,6 +137,14 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
         when (item.itemId) {
             R.id.menu_delete -> {
                 deleteNote()
+            }
+
+            R.id.menu_addPhoto -> {
+                // open the gallery and retrive a photo uri
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+                    type = "image/*"
+                }
+                startActivityForResult(intent, REQUEST_IMAGE_GET)
             }
         }
 
