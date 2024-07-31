@@ -14,6 +14,7 @@ import com.bersyte.noteapp.databinding.FragmentNewNoteBinding
 import com.bersyte.noteapp.model.Note
 import com.bersyte.noteapp.toast
 import com.bersyte.noteapp.viewmodel.NoteViewModel
+
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.FileOutputStream
@@ -69,8 +70,6 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
                 val outputStream = FileOutputStream(imageUriCopy)
                 // read the image uri data and copy it to the imageUriCopy file
                 resolver.openInputStream(selectedImageUri)?.copyTo(outputStream)
-                // save the file path to the db
-                //note.imageUri = imageUriCopy.absolutePath
                 // display image
                 binding.ivNoteImage.setImageURI(selectedImageUri)
             }
@@ -112,7 +111,7 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
             }
 
             R.id.menu_addPhoto -> {
-                // open the gallery and retrive a photo uri
+                // open the gallery and retrieve a photo uri
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
                     type = "image/*"
                 }

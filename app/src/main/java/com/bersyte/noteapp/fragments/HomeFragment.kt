@@ -16,7 +16,7 @@ import com.bersyte.noteapp.model.Note
 import com.bersyte.noteapp.viewmodel.NoteViewModel
 
 
-class HomeFragment : Fragment(R.layout.fragment_home),
+  class HomeFragment : Fragment(R.layout.fragment_home),
     SearchView.OnQueryTextListener {
 
     private var _binding: FragmentHomeBinding? = null

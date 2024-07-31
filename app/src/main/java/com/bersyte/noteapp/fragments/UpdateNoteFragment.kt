@@ -13,11 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bersyte.noteapp.MainActivity
-import com.bersyte.noteapp.R
-import com.bersyte.noteapp.databinding.FragmentUpdateNoteBinding
 import com.bersyte.noteapp.model.Note
 import com.bersyte.noteapp.toast
 import com.bersyte.noteapp.viewmodel.NoteViewModel
+import com.bersyte.noteapp.R
+import com.bersyte.noteapp.databinding.FragmentUpdateNoteBinding
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
