@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.bersyte.noteapp.model.Folder
 import com.bersyte.noteapp.model.Note
 
-@Database(entities = [Note::class], version = 2)
+@Database(entities = [Note::class, Folder::class], version = 3)
 abstract class NoteDatabase: RoomDatabase() {
 
     abstract fun getNoteDao(): NoteDao
+    abstract fun getFolderDao(): FolderDao
 
     companion object {
         @Volatile

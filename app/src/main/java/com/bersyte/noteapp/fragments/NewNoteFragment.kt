@@ -1,10 +1,12 @@
 package com.bersyte.noteapp.fragments
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -62,27 +64,37 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
             val selectedImageUri: Uri? = data?.data
             // read the image uri using content resolver
             val resolver = requireContext().contentResolver
+            val noteTitle = binding.etNoteTitle.text.toString()
+            val fileName = noteTitle.replace(" ", "")
             // create a new file for the uri to be copied to
-            val imageUriCopy = File(requireContext().filesDir, "test.jpg")
-
+            val imageUriCopy = File(requireContext().filesDir, "$fileName.jpg")
             if (selectedImageUri != null) {
-                // open stream to write data to the imageUriCopy file
-                val outputStream = FileOutputStream(imageUriCopy)
-                // read the image uri data and copy it to the imageUriCopy file
-                resolver.openInputStream(selectedImageUri)?.copyTo(outputStream)
+                copyURIToFile(resolver, selectedImageUri, imageUriCopy)
+            }
+        }
+    }
+
+    private fun copyURIToFile(resolver: ContentResolver, uri: Uri, file: File) {
+        // open stream to write data to the imageUriCopy file
+        resolver.openInputStream(uri).use { input ->
+            // read the image uri data and copy it to the imageUriCopy file
+            FileOutputStream(file).use { outputStream ->
+                input?.copyTo(outputStream)
                 // display image
-                binding.ivNoteImage.setImageURI(selectedImageUri)
+                binding.ivNoteImage.setImageURI(uri)
             }
         }
     }
 
     private fun saveNote(view: View) {
-        val imageUriCopy = File(requireContext().filesDir,"test.jpg")
         val noteTitle = binding.etNoteTitle.text.toString().trim()
+        val fileName = noteTitle.replace(" ", "")
         val noteBody = binding.etNoteBody.text.toString().trim()
+        val imageUriCopy = File(requireContext().filesDir,"$fileName.jpg")
         val noteUri = imageUriCopy.absolutePath
+
         if (noteTitle.isNotEmpty()) {
-            val note = Note(0, noteTitle, noteBody, noteUri)
+            val note = Note(0, noteTitle, noteBody, noteUri, null)
 
             noteViewModel.addNote(note)
             Snackbar.make(

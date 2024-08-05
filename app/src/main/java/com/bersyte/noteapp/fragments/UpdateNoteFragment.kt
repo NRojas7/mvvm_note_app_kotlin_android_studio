@@ -70,7 +70,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             val body = binding.etNoteBodyUpdate.text.toString().trim()
 
             if (title.isNotEmpty()) {
-                val note = Note(currentNote.id, title, body, currentNote.imageUri)
+                val note = Note(currentNote.noteId, title, body, currentNote.imageUri, null)
                 noteViewModel.updateNote(note)
 
                 view.findNavController().navigate(R.id.action_updateNoteFragment_to_homeFragment)
@@ -89,25 +89,27 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             val selectedImageUri: Uri? = data?.data
             // read the image uri using content resolver
             val resolver = requireContext().contentResolver
+            val fileName = currentNote.noteTitle.replace(" ","")
             // create a new file for the uri to be copied to
-            val imageUriCopy = File(requireContext().filesDir, "test.jpg")
+            val imageUriCopy = File(requireContext().filesDir, "$fileName.jpg")
 
             if (selectedImageUri != null) {
-                // open stream to write data to the imageUriCopy file
-                val outputStream = FileOutputStream(imageUriCopy)
-                // read the image uri data and copy it to the imageUriCopy file
-                resolver.openInputStream(selectedImageUri)?.copyTo(outputStream)
-                // save the file path to the db
-                currentNote.imageUri = imageUriCopy.absolutePath
-                // display image
-                binding.ivNoteImage.setImageURI(selectedImageUri)
+                copyURIToFile(resolver,selectedImageUri,imageUriCopy)
             }
         }
     }
 
-    private fun File.copyInputStreamtoFile(inputStream : InputStream) {
-        this.outputStream().use { fileOut ->
-            inputStream.copyTo(fileOut)
+    private fun copyURIToFile(resolver: ContentResolver, uri: Uri, file: File) {
+        // open stream to write data to the imageUriCopy file
+        resolver.openInputStream(uri).use { input ->
+            // read the image uri data and copy it to the imageUriCopy file
+            FileOutputStream(file).use { outputStream ->
+                input?.copyTo(outputStream)
+                // save the file path
+                currentNote.imageUri = file.absolutePath
+                // display image
+                binding.ivNoteImage.setImageURI(uri)
+            }
         }
     }
 
@@ -156,5 +158,4 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
         super.onDestroy()
         _binding = null
     }
-
 }
