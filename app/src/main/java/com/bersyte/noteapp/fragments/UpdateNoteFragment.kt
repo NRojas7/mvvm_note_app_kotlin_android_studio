@@ -142,7 +142,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             }
 
             R.id.menu_addPhoto -> {
-                // open the gallery and retrive a photo uri
+                // open the gallery and retrieve a photo uri
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
                     type = "image/*"
                 }

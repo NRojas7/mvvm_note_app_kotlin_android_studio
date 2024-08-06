@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         setUpViewModel()
-        val resolver = contentResolver
     }
 
     private fun setUpViewModel() {
